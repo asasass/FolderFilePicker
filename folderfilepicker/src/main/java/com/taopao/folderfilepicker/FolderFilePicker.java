@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +37,8 @@ public class FolderFilePicker extends Dialog {
     private FileLvAdapter mFileLvAdapter;
     private String mCurrentPath;
     private PickPathEvent mEvent;
+    private Button mBtncancel;
+    private Button mBtnOk;
 
     public FolderFilePicker(Context context, PickPathEvent event,
                             String... extensions) {
@@ -52,28 +55,32 @@ public class FolderFilePicker extends Dialog {
 
     private void init() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_select_folder);
+        setContentView(R.layout.dialog_select_folder);
         mTitle = (TextView) findViewById(R.id.title_tv);
         mFilesLv = (ListView) findViewById(R.id.folder_lv);
-        findViewById(R.id.ok_btn).setOnClickListener(
+        mBtnOk = findViewById(R.id.ok_btn);
+        mBtnOk.setOnClickListener(
                 new View.OnClickListener() {
-
                     @Override
                     public void onClick(View arg0) {
                         setResult();
                         FolderFilePicker.this.dismiss();
                     }
                 });
-
-        findViewById(R.id.cancel_btn).setOnClickListener(
+        mBtnOk.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+//                mBtnOk.setBackgroundResource(hasFocus ? R.drawable.folder_48 : R.drawable.folder_48);
+            }
+        });
+        mBtncancel = findViewById(R.id.cancel_btn);
+        mBtncancel.setOnClickListener(
                 new View.OnClickListener() {
-
                     @Override
                     public void onClick(View arg0) {
                         FolderFilePicker.this.dismiss();
                     }
                 });
-
         setCurrentPath(ROOT);
         mFileLvAdapter = new FileLvAdapter();
         setListAdapterData();
